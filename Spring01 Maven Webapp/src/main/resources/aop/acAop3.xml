@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<bean id="helloWorldImpl1" class="com.wcxu.aop.HelloWorldImpl1" />
+	<bean id="helloWorldImpl2" class="com.wcxu.aop.HelloWorldImpl2" />
+	<bean id="timeHandler" class="com.wcxu.aop.TimeHandler" />
+	<bean id="logHandler" class="com.wcxu.aop.LogHandler" />
+
+	<!-- 使用order设置织入顺序（由外向内 1.before,2.before, ... ,2after,1.after） -->
+	<aop:config>
+		<aop:aspect id="time" ref="timeHandler" order="1">
+			<aop:pointcut id="addTime"
+				expression="execution(* com.wcxu.aop.HelloWorld.*(..))" />
+			<aop:before method="printTime" pointcut-ref="addTime" />
+			<aop:after method="printTime" pointcut-ref="addTime" />
+		</aop:aspect>
+		<aop:aspect id="log" ref="logHandler" order="2">
+			<aop:pointcut id="printLog"
+				expression="execution(* com.wcxu.aop.HelloWorld.*(..))" />
+			<aop:before method="LogBefore" pointcut-ref="printLog" />
+			<aop:after method="LogAfter" pointcut-ref="printLog" />
+		</aop:aspect>
+	</aop:config>
+</beans>

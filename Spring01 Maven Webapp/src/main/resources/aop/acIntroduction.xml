@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<bean id="aspect" class="com.wcxu.aop.execution.Aspect"></bean>
+	<bean id="aspectBiz" class="com.wcxu.aop.execution.AspectBiz"></bean>
+
+	<!-- 可以先定义一个 aop:pointcut,然后before用pointcut-ref调用它;也可以在before中直接定义一个pointcut -->
+	<aop:config>
+		<aop:aspect id="aspectAop" ref="aspect">
+			<aop:declare-parents types-matching="com.wcxu.aop.execution.*Biz"
+				implement-interface="com.wcxu.aop.introduction.Filt" 
+				default-impl="com.wcxu.aop.introduction.FitImpl"/>
+		</aop:aspect>
+	</aop:config>
+</beans>
